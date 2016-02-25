@@ -48,11 +48,11 @@ struct LinkedList{
 
 bool IsChar(char c){
         //return (((c > 64)&&(c < 91)) || ((c > 96)&&(c < 123)) || ((c > 127)&&(c < 176)) || ((c > 223)&&(c < 242))); //Why code doesn't see rus characters?
-        return (((c > 64)&&(c < 91)) || ((c > 96)&&(c < 123)));
+        return (((c >= 64)&&(c < 91)) || ((c > 96)&&(c < 123)));
 }
 
-LinkedList FoundMaxWord(LinkedList *text, int *curlength){
-        LinkedList MaxWord;
+LinkedList *FoundMaxWord(LinkedList *text, int *curlength){
+        LinkedList *MaxWord = new LinkedList;
         int length = 0;
         Node *node = text->first;
         Node *wnode; //word node
@@ -61,29 +61,25 @@ LinkedList FoundMaxWord(LinkedList *text, int *curlength){
         while (node != NULL){
                 if (IsChar(node->character))
                 {
-
                         CurWord = node;
                         while (node != NULL && IsChar(node->character) ) {
                                 length++;
                                 node = node->next;
-
                         }
                         if (length > *curlength) {
 
                                 *curlength = length;
-                                wnode = MaxWord.first;
+                                wnode = MaxWord->first;
                                 do {
                                         if (wnode == NULL) {
-                                                MaxWord.AddToEnd(CurWord->character);
+                                                MaxWord->AddToEnd(CurWord->character);
                                                 CurWord = CurWord->next;
-
                                         }
                                         else {
                                                 wnode->character = CurWord->character;
                                                 CurWord = CurWord->next;
                                                 wnode = wnode->next;
                                         }
-
                                 } while (CurWord != node);
                         }
                         length = 0;
@@ -91,9 +87,7 @@ LinkedList FoundMaxWord(LinkedList *text, int *curlength){
                 else {
                         node = node->next;
                 }
-
         }
-
         return MaxWord;
 }
 
@@ -102,9 +96,9 @@ int main(){
         text.ReadList();
         int length = 0;
 
-        LinkedList MaxWord = FoundMaxWord(&text, &length);
+        LinkedList *MaxWord = FoundMaxWord(&text, &length);
 
-        MaxWord.PrintList();
+        MaxWord->PrintList();
         cout << endl << "Length of MaxWord: " << length;
 
         return 0;
